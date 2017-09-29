@@ -1,0 +1,74 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Marky Rest API",
+    "description": "Exposes Rest Services for Marky",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8080",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/subjects": {
+      "get": {
+        "operationId": "getSubjects",
+        "summary": "Subjects",
+        "description": "All Subjects of a year (e.g. Mathe, Physik, Religion).",
+        "tags": [
+          "Subjects"
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of subjects",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/subject"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "subject": {
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Unique identifier representing a specific subject."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the subject."
+        },
+        "scope": {
+          "type": "string",
+          "description": "The scope of the subject (e.g. 7a, 8b, 10)."
+        }
+      }
+    },
+    "error": {
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
