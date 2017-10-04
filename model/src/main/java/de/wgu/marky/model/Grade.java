@@ -6,16 +6,14 @@ import java.util.List;
 @Entity
 //@SequenceGenerator(
 //        name="SEQ_STORE",
-//        sequenceName="subject_sequence"
+//        sequenceName="grade_sequence"
 //)
-public class Subject {
+public class Grade {
     private Long id;
     private String name;
-    private String scope;
     private List<Student> students;
-    private List<Test> tests;
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -33,29 +31,12 @@ public class Subject {
         this.name = name;
     }
 
-    public String getScope() {
-        return scope;
-    }
-
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    @ManyToMany(mappedBy = "subjects")
+    @OneToMany(mappedBy = "grade")
     public List<Student> getStudents() {
         return students;
     }
 
     public void setStudents(List<Student> students) {
         this.students = students;
-    }
-
-    @OneToMany(mappedBy = "subject")
-    public List<Test> getTests() {
-        return tests;
-    }
-
-    public void setTests(List<Test> tests) {
-        this.tests = tests;
     }
 }

@@ -1,0 +1,7 @@
+DELETE FROM Mark;
+DELETE FROM Test;
+DELETE FROM Student_Subject;
+DELETE FROM Student;
+DELETE FROM Grade;
+DELETE FROM Subject;
+DELETE FROM Category;
