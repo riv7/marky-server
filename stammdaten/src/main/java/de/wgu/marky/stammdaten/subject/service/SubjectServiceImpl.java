@@ -21,7 +21,7 @@ public class SubjectServiceImpl implements SubjectService {
         this.subjectDao = subjectDao;
     }
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Transactional(Transactional.TxType.MANDATORY)
     public List<Subject> getSubjects() {
         return subjectDao.getSubjects();
     }

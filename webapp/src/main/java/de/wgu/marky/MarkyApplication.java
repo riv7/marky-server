@@ -8,7 +8,7 @@ package de.wgu.marky;
  * agreement that accompanies this distribution.
  */
 
-import de.wgu.marky.stammdaten.subject.rest.SubjectsApiImpl;
+import de.wgu.marky.stammdaten.year.rest.YearApiImpl;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Produces;
@@ -28,7 +28,7 @@ public class MarkyApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> services = new HashSet<>();
-        services.add(SubjectsApiImpl.class);
+        services.add(YearApiImpl.class);
         return services;
     }
 

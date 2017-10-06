@@ -13,8 +13,42 @@
   "produces": [
     "application/json"
   ],
+  "parameters" : {
+    "year" : {
+      "in" : "path",
+      "required" : true,
+      "type" : "String"
+    }
+  },
   "paths": {
-    "/subjects": {
+    "/years/{year}": {
+      "get": {
+        "operationId": "getYear",
+        "summary": "Year",
+        "description": "Year",
+        "tags": [
+          "Year"
+        ],
+        "parameters" : {
+          "$ref": "#/parameters/year"
+        },
+        "responses": {
+          "200": {
+            "description": "year",
+            "schema": {
+              "$ref": "#/definitions/year"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/years/{year}/subjects": {
       "get": {
         "operationId": "getSubjects",
         "summary": "Subjects",
@@ -22,6 +56,9 @@
         "tags": [
           "Subjects"
         ],
+        "parameters" : {
+          "$ref": "#/parameters/year"
+        },
         "responses": {
           "200": {
             "description": "An array of subjects",
@@ -40,8 +77,159 @@
           }
         }
       }
+    },
+    "/years/{year}/grades": {
+      "get": {
+        "operationId": "getGrades",
+        "summary": "Grades",
+        "description": "All Grades of a year (e.g. 7a, 8b, 10c).",
+        "tags": [
+          "Grades"
+        ],
+        "parameters" : {
+          "$ref": "#/parameters/year"
+        },
+        "responses": {
+          "200": {
+            "description": "An array of grades",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/grade"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/years/{year}/students": {
+      "get": {
+        "operationId": "getStudents",
+        "summary": "Students",
+        "description": "All Students of a year (e.g. Kimi, Seb, Lewis).",
+        "tags": [
+          "Students"
+        ],
+        "parameters" : {
+          "$ref": "#/parameters/year"
+        },
+        "responses": {
+          "200": {
+            "description": "An array of students",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/student"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/years/{year}/categories": {
+      "get": {
+        "operationId": "getCategories",
+        "summary": "Categories",
+        "description": "All Categories of a year (e.g. schriftlich, test, mündlich).",
+        "tags": [
+          "Categories"
+        ],
+        "parameters": {
+          "$ref": "#/parameters/year"
+        },
+        "responses": {
+          "200": {
+            "description": "An array of categories",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/category"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/years/{year}/subjects2students": {
+      "get": {
+        "operationId": "getSubjects2Students",
+        "summary": "Subjects2Students",
+        "description": "All Subjects2Students of a year.",
+        "tags": [
+          "Subjects2Students"
+        ],
+        "parameters": {
+          "$ref": "#/parameters/year"
+        },
+        "responses": {
+          "200": {
+            "description": "An array of subjects2students",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/subject2student"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/years/{year}/tests": {
+      "get": {
+        "operationId": "getTests",
+        "summary": "Tests",
+        "description": "All Tests of a year.",
+        "tags": [
+          "Tests"
+        ],
+        "parameters": {
+          "$ref": "#/parameters/year"
+        },
+        "responses": {
+          "200": {
+            "description": "An array of tests and marks",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/test"
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
+
   "definitions": {
     "subject": {
       "properties": {
@@ -56,6 +244,146 @@
         "scope": {
           "type": "string",
           "description": "The scope of the subject (e.g. 7a, 8b, 10)."
+        }
+      }
+    },
+    "grade": {
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Unique identifier representing a specific subject."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the grade."
+        }
+      }
+    },
+    "student": {
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Unique identifier representing a specific student."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the student."
+        },
+        "gradeId": {
+          "type": "number",
+          "description": "foreign identifier representing a specific grade."
+        }
+      }
+    },
+    "category": {
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Unique identifier representing a specific student."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the student."
+        },
+        "color": {
+          "type": "string",
+          "description": "The color of the category."
+        },
+        "faktor": {
+          "type": "number",
+          "description": "Calculation factor of categories."
+        },
+        "sortingrank": {
+          "type": "string",
+          "description": "The sortingrank of the category."
+        }
+      }
+    },
+    "test" : {
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Unique identifier representing a specific test."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the test."
+        },
+        "written": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The written date of the test."
+        },
+        "marks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mark"
+          }
+        }
+      }
+    },
+    "mark" : {
+      "properties": {
+        "studentId": {
+          "type": "number",
+          "description": "Unique identifier representing a specific student."
+        },
+        "mark": {
+          "type": "number",
+          "format": "double",
+          "description": "The mark of the test."
+        }
+      }
+    },
+    "subject2student": {
+      "properties": {
+        "subjectId": {
+          "type": "number",
+          "description": "Unique identifier representing a specific subject."
+        },
+        "studentId": {
+          "type": "number",
+          "description": "Unique identifier representing a specific student."
+        }
+      }
+    },
+    "year": {
+      "properties": {
+        "subjects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/subject"
+          }
+        },
+        "grades": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/grade"
+          }
+        },
+        "students": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/student"
+          }
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/category"
+          }
+        },
+        "subjects2students": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/subject2student"
+          }
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/test"
+          }
         }
       }
     },

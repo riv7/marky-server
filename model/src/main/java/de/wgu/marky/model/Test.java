@@ -12,7 +12,7 @@ import java.util.List;
 public class Test {
     private Long id;
     private String name;
-    private LocalDateTime writtenAt;
+    private LocalDateTime written;
     private Subject subject;
     private Category category;
     private List<Mark> marks;
@@ -36,12 +36,12 @@ public class Test {
     }
 
     @Column(nullable = false)
-    public LocalDateTime getWrittenAt() {
-        return writtenAt;
+    public LocalDateTime getWritten() {
+        return written;
     }
 
-    public void setWrittenAt(LocalDateTime writtenAt) {
-        this.writtenAt = writtenAt;
+    public void setWritten(LocalDateTime writtenAt) {
+        this.written = writtenAt;
     }
 
     @ManyToOne

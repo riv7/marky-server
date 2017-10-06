@@ -69,8 +69,8 @@
                     <configuration>
                         <apiFile>${project.basedir}/src/main/resources/restapi.json</apiFile>
                         <language>jaxrsinterfaces</language>
-                        <apiPackage>de.wgu.marky.stammdaten.rest.api</apiPackage>
-                        <modelPackage>de.wgu.marky.stammdaten.rest.model</modelPackage>
+                        <apiPackage>de.wgu.marky.stammdaten.year.api</apiPackage>
+                        <modelPackage>de.wgu.marky.stammdaten.year.model</modelPackage>
                     </configuration>
                     <executions>
                         <execution>

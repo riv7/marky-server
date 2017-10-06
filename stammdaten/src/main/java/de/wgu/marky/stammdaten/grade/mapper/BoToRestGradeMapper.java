@@ -6,19 +6,19 @@
  * agreement that accompanies this distribution.
  */
 
-package de.wgu.marky.stammdaten.subject.mapper;
+package de.wgu.marky.stammdaten.grade.mapper;
 
-import de.wgu.marky.model.Subject;
+import de.wgu.marky.model.Grade;
 import org.mapstruct.Mapper;
 
 @Mapper( componentModel = "cdi" )
-public interface BoToRestSubjectMapper {
+public interface BoToRestGradeMapper {
 
     /**
-     * Map Bo Subjects to Rest Subjects
+     * Map Bo Grades to Rest Grades
      *
-     * @param subject
+     * @param grade
      * @return
      */
-    de.wgu.marky.stammdaten.year.model.Subject boSubjectToRestSubject(Subject subject);
+    de.wgu.marky.stammdaten.year.model.Grade boGradeToRestGrade(Grade grade);
 }
