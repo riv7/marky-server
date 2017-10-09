@@ -35,4 +35,10 @@ public class TestDaoImpl implements TestDao {
         // Perform query
         return query.getResultList();
     }
+
+    @Override
+    public Test persistTest(Test test) {
+        entityManager.persist(test);
+        return test;
+    }
 }

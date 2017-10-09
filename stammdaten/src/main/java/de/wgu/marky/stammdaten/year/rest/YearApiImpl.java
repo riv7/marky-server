@@ -11,6 +11,7 @@ import de.wgu.marky.stammdaten.test.mapper.TestConverter;
 import de.wgu.marky.stammdaten.test.service.TestService;
 import de.wgu.marky.stammdaten.year.api.NotFoundException;
 import de.wgu.marky.stammdaten.year.api.YearsApi;
+import de.wgu.marky.stammdaten.year.model.TestData;
 import de.wgu.marky.stammdaten.year.model.Year;
 import de.wgu.marky.stammdaten.subject.mapper.SubjectConverter;
 import de.wgu.marky.stammdaten.subject.service.SubjectService;
@@ -59,6 +60,15 @@ public class YearApiImpl implements YearsApi {
         this.studentConverter = studentConverter;
         this.categoryConverter = categoryConverter;
         this.testConverter = testConverter;
+    }
+
+
+    @Override
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public Response addTest(String year, TestData testData) throws NotFoundException {
+        final Test test = testConverter.convert(testData);
+        final Test persistentTest = testService.persistTest(test);
+        return Response.ok(testConverter.convert(persistentTest)).build();
     }
 
     @Override

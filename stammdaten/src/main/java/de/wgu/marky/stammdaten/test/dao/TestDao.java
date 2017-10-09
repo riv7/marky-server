@@ -13,4 +13,12 @@ public interface TestDao {
      * @return tests
      */
     List<Test> getTests();
+
+    /**
+     * persists given test
+     *
+     * @param test
+     * @return
+     */
+    Test persistTest(Test test);
 }

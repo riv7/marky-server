@@ -15,9 +15,10 @@
   ],
   "parameters" : {
     "year" : {
-      "in" : "path",
-      "required" : true,
-      "type" : "String"
+      "name": "year",
+      "in": "path",
+      "required": true,
+      "type": "String"
     }
   },
   "paths": {
@@ -226,10 +227,45 @@
             }
           }
         }
+      },
+      "post": {
+        "operationId": "addTest",
+        "summary": "addTests",
+        "description": "Add a Test",
+        "tags": [
+          "Tests"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/year"
+          },
+          {
+            "name": "test_data",
+            "in": "body",
+            "description": "add test to year",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/testData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the newly created test data",
+            "schema": {
+              "$ref": "#/definitions/test"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
       }
     }
   },
-
   "definitions": {
     "subject": {
       "properties": {
@@ -314,6 +350,14 @@
           "format": "date-time",
           "description": "The written date of the test."
         },
+        "category": {
+          "type": "number",
+          "description": "foreign identifier representing a specific category."
+        },
+        "subject": {
+          "type": "number",
+          "description": "foreign identifier representing a specific subject."
+        },
         "marks": {
           "type": "array",
           "items": {
@@ -344,6 +388,33 @@
         "studentId": {
           "type": "number",
           "description": "Unique identifier representing a specific student."
+        }
+      }
+    },
+    "testData": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the test."
+        },
+        "written": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The written date of the test."
+        },
+        "category": {
+          "type": "number",
+          "description": "foreign identifier representing a specific category."
+        },
+        "subject": {
+          "type": "number",
+          "description": "foreign identifier representing a specific subject."
+        },
+        "marks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/mark"
+          }
         }
       }
     },

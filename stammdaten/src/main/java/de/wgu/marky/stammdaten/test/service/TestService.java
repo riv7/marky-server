@@ -13,4 +13,12 @@ public interface TestService {
      */
     List<Test> getTests();
 
+    /**
+     * persists given test
+     *
+     * @param test
+     * @return
+     */
+    Test persistTest(Test test);
+
 }

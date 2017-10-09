@@ -25,4 +25,10 @@ public class TestServiceImpl implements TestService {
     public List<Test> getTests() {
         return testDao.getTests();
     }
+
+    @Override
+    @Transactional(Transactional.TxType.MANDATORY)
+    public Test persistTest(Test test) {
+        return testDao.persistTest(test);
+    }
 }
