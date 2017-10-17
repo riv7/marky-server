@@ -21,4 +21,11 @@ public interface TestService {
      */
     Test persistTest(Test test);
 
+    /**
+     * find test
+     *
+     * @param testId
+     * @return
+     */
+    Test findTest(Long testId);
 }

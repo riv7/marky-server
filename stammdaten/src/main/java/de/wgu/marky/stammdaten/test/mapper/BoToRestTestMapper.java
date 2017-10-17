@@ -12,11 +12,9 @@ import de.wgu.marky.model.Category;
 import de.wgu.marky.model.Mark;
 import de.wgu.marky.model.Test;
 import de.wgu.marky.stammdaten.year.model.TestData;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
-@Mapper( componentModel = "cdi" )
+@Mapper( componentModel = "cdi", collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
 public interface BoToRestTestMapper {
 
     /**
@@ -42,14 +40,49 @@ public interface BoToRestTestMapper {
     })
     de.wgu.marky.stammdaten.year.model.Mark boMarkToRestMarkMapper(Mark mark);
 
+    /**
+     * create new BO from Rest
+     *
+     * @param testData
+     * @return
+     */
     @Mappings({
             @Mapping(source = "category", target = "category.id"),
             @Mapping(source = "subject", target = "subject.id")
     })
     Test restTestToBoTest(TestData testData);
 
+    /**
+     * create new Mark BO from Rest
+     *
+     * @param mark
+     * @return
+     */
     @Mappings({
             @Mapping(source = "studentId", target = "student.id")
     })
     Mark restMarkToBoMark(de.wgu.marky.stammdaten.year.model.Mark mark);
+
+    /**
+     * update existing Test
+     *
+     * @param testData
+     * @param test
+     */
+    @Mappings({
+            @Mapping(source = "category", target = "category.id"),
+            @Mapping(source = "subject", target = "subject.id")
+    })
+    Test updateTestBoFromRestBo(TestData testData, @MappingTarget Test test);
+
+//    /**
+//     * update existing Marks
+//     *
+//     * @param mark
+//     * @return
+//     */
+//    @Mappings({
+//            @Mapping(source = "studentId", target = "student.id")
+//    })
+//    Mark updateMarkBoFromRestMark(de.wgu.marky.stammdaten.year.model.Mark restMark, @MappingTarget Mark mark);
 }

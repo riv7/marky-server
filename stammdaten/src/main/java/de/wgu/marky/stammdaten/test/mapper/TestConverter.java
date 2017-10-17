@@ -30,4 +30,13 @@ public interface TestConverter {
      * @return
      */
     Test convert(TestData testData);
+
+    /**
+     * updates Test with given Testdata
+     *
+     * @param testData
+     * @param test
+     * @return
+     */
+    Test update(TestData testData, Test test);
 }

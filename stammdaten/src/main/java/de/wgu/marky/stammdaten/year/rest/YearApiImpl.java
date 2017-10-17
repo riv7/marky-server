@@ -62,15 +62,6 @@ public class YearApiImpl implements YearsApi {
         this.testConverter = testConverter;
     }
 
-
-    @Override
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public Response addTest(String year, TestData testData) throws NotFoundException {
-        final Test test = testConverter.convert(testData);
-        final Test persistentTest = testService.persistTest(test);
-        return Response.ok(testConverter.convert(persistentTest)).build();
-    }
-
     @Override
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Response getCategories() throws NotFoundException {
@@ -111,6 +102,23 @@ public class YearApiImpl implements YearsApi {
     public Response getTests() throws NotFoundException {
         final List<Test> tests = testService.getTests();
         return Response.ok(testConverter.convert(tests)).build();
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public Response addTest(String year, TestData testData) throws NotFoundException {
+        final Test test = testConverter.convert(testData);
+        final Test persistentTest = testService.persistTest(test);
+        return Response.ok(testConverter.convert(persistentTest)).build();
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public Response updateTest(String year, String testId, TestData testData) throws NotFoundException {
+        final Test test = testService.findTest(Long.valueOf(testId));
+        final Test updatedTest = testConverter.update(testData, test);
+        final Test persistentTest = testService.persistTest(updatedTest);
+        return Response.ok(testConverter.convert(persistentTest)).build();
     }
 
     @Override

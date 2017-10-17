@@ -31,4 +31,10 @@ public class TestServiceImpl implements TestService {
     public Test persistTest(Test test) {
         return testDao.persistTest(test);
     }
+
+    @Override
+    @Transactional(Transactional.TxType.MANDATORY)
+    public Test findTest(Long testId) {
+        return testDao.findTest(testId);
+    }
 }

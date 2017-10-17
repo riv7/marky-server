@@ -1,6 +1,5 @@
 package de.wgu.marky.stammdaten.test.dao;
 
-import de.wgu.marky.model.Category;
 import de.wgu.marky.model.Test;
 
 import javax.enterprise.context.RequestScoped;
@@ -37,8 +36,23 @@ public class TestDaoImpl implements TestDao {
     }
 
     @Override
+    @Transactional(Transactional.TxType.MANDATORY)
     public Test persistTest(Test test) {
         entityManager.persist(test);
         return test;
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.MANDATORY)
+    public Test findTest(Long testId) {
+
+        // Prepare query
+        String statement = "SELECT t FROM Test AS t WHERE t.id = :testId";
+
+        // Retrieve from DB
+        TypedQuery<Test> query = entityManager.createQuery(statement, Test.class);
+
+        // Perform query
+        return query.setParameter("testId", testId).getSingleResult();
     }
 }

@@ -42,4 +42,10 @@ public class TestConverterImpl implements TestConverter {
     public Test convert(TestData testData) {
         return boToRestTestMapper.restTestToBoTest(testData);
     }
+
+    @Override
+    @Transactional(Transactional.TxType.MANDATORY)
+    public Test update(TestData testData, Test test) {
+        return boToRestTestMapper.updateTestBoFromRestBo(testData, test);
+    }
 }

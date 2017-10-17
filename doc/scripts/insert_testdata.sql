@@ -79,19 +79,19 @@ INSERT INTO Student_Subject (students_id, subjects_id) VALUES (@student17ID, @su
 INSERT INTO Student_Subject (students_id, subjects_id) VALUES (@student18ID, @subject3ID);
 
 #test
-INSERT INTO Test (name, writtenAt, category_id, subject_id) VALUES ('Mündlich', '2017-01-01 00:00:00', @category3ID, @subject1ID);
+INSERT INTO Test (name, written, category_id, subject_id) VALUES ('Mündlich', '2017-01-01 00:00:00', @category3ID, @subject1ID);
 SET @test3ID = LAST_INSERT_ID();
-INSERT INTO Test (name, writtenAt, category_id, subject_id) VALUES ('KA2', '2016-08-01 00:00:00', @category1ID, @subject1ID);
+INSERT INTO Test (name, written, category_id, subject_id) VALUES ('KA2', '2016-08-01 00:00:00', @category1ID, @subject1ID);
 SET @test2ID = LAST_INSERT_ID();
-INSERT INTO Test (name, writtenAt, category_id, subject_id) VALUES ('KA1', '2016-01-01 00:00:00', @category1ID, @subject1ID);
+INSERT INTO Test (name, written, category_id, subject_id) VALUES ('KA1', '2016-01-01 00:00:00', @category1ID, @subject1ID);
 SET @test1ID = LAST_INSERT_ID();
-INSERT INTO Test (name, writtenAt, category_id, subject_id) VALUES ('KA3', '2017-07-07 00:00:00', @category1ID, @subject1ID);
+INSERT INTO Test (name, written, category_id, subject_id) VALUES ('KA3', '2017-07-07 00:00:00', @category1ID, @subject1ID);
 SET @test4ID = LAST_INSERT_ID();
-INSERT INTO Test (name, writtenAt, category_id, subject_id) VALUES ('Mündl.', '2017-05-05 00:00:00', @category3ID, @subject2ID);
+INSERT INTO Test (name, written, category_id, subject_id) VALUES ('Mündl.', '2017-05-05 00:00:00', @category3ID, @subject2ID);
 SET @test5ID = LAST_INSERT_ID();
-INSERT INTO Test (name, writtenAt, category_id, subject_id) VALUES ('KA1', '2017-07-05 00:00:00', @category1ID, @subject2ID);
+INSERT INTO Test (name, written, category_id, subject_id) VALUES ('KA1', '2017-07-05 00:00:00', @category1ID, @subject2ID);
 SET @test6ID = LAST_INSERT_ID();
-INSERT INTO Test (name, writtenAt, category_id, subject_id) VALUES ('Mündl.', '2017-05-05 00:00:00', @category2ID, @subject3ID);
+INSERT INTO Test (name, written, category_id, subject_id) VALUES ('Mündl.', '2017-05-05 00:00:00', @category2ID, @subject3ID);
 SET @test7ID = LAST_INSERT_ID();
 
 #marks

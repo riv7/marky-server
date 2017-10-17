@@ -2,6 +2,7 @@ package de.wgu.marky.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +16,7 @@ public class Test {
     private LocalDateTime written;
     private Subject subject;
     private Category category;
-    private List<Mark> marks;
+    private List<Mark> marks = new ArrayList<>();
 
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     public Long getId() {
@@ -63,9 +64,14 @@ public class Test {
         this.category = category;
     }
 
-    @OneToMany(mappedBy = "test")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "test")
     public List<Mark> getMarks() {
         return marks;
+    }
+
+    public void addMark(Mark mark) {
+        getMarks().add(mark);
+        mark.setTest(this);
     }
 
     public void setMarks(List<Mark> marks) {

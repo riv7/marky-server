@@ -264,6 +264,50 @@
           }
         }
       }
+    },
+    "/years/{year}/tests/{testId}": {
+      "post": {
+        "operationId": "updateTest",
+        "summary": "updateTest",
+        "description": "Update a Test",
+        "tags": [
+          "Tests"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/year"
+          },
+          {
+            "name": "testId",
+            "in": "path",
+            "required": true,
+            "type": "String"
+          },
+          {
+            "name": "test_data",
+            "in": "body",
+            "description": "update test",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/testData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the updated test data",
+            "schema": {
+              "$ref": "#/definitions/test"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

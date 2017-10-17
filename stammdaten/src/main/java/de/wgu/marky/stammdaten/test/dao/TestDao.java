@@ -21,4 +21,12 @@ public interface TestDao {
      * @return
      */
     Test persistTest(Test test);
+
+    /**
+     * find test by id
+     *
+     * @param testId
+     * @return
+     */
+    Test findTest(Long testId);
 }
