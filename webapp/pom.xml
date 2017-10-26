@@ -36,10 +36,11 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
+            <!-- not used atm. this is done with packaging=war in this pom, because of openshift buils -->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-war-plugin</artifactId>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 
