@@ -105,6 +105,8 @@ INSERT INTO Mark (mark, student_id, test_id) VALUES (1.5, @student7ID, @test3ID)
 INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student8ID, @test3ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (4.0, @student9ID, @test3ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (6.0, @student10ID, @test3ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (6.0, @student11ID, @test3ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (6.0, @student12ID, @test3ID);
 
 INSERT INTO Mark (mark, student_id, test_id) VALUES (3.0, @student1ID, @test2ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student2ID, @test2ID);
@@ -116,6 +118,8 @@ INSERT INTO Mark (mark, student_id, test_id) VALUES (1.5, @student7ID, @test2ID)
 INSERT INTO Mark (mark, student_id, test_id) VALUES (1.5, @student8ID, @test2ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (5.0, @student9ID, @test2ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (2.0, @student10ID, @test2ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (2.0, @student11ID, @test2ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (2.0, @student12ID, @test2ID);
 
 INSERT INTO Mark (mark, student_id, test_id) VALUES (1.0, @student1ID, @test1ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (4.5, @student2ID, @test1ID);
@@ -127,6 +131,8 @@ INSERT INTO Mark (mark, student_id, test_id) VALUES (1.0, @student7ID, @test1ID)
 INSERT INTO Mark (mark, student_id, test_id) VALUES (1.5, @student8ID, @test1ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (2.0, @student9ID, @test1ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (4.0, @student10ID, @test1ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (4.0, @student11ID, @test1ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (4.0, @student12ID, @test1ID);
 
 INSERT INTO Mark (mark, student_id, test_id) VALUES (2.0, @student1ID, @test4ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (2.5, @student2ID, @test4ID);
@@ -138,16 +144,18 @@ INSERT INTO Mark (mark, student_id, test_id) VALUES (4.0, @student7ID, @test4ID)
 INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student8ID, @test4ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (3.0, @student9ID, @test4ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (3.0, @student10ID, @test4ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (3.0, @student11ID, @test4ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (3.0, @student12ID, @test4ID);
 
-INSERT INTO Mark (mark, student_id, test_id) VALUES (2.0, @student11ID, @test5ID);
-INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student12ID, @test5ID);
-INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student13ID, @test5ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (2.0, @student13ID, @test5ID);
 INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student14ID, @test5ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student15ID, @test5ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student16ID, @test5ID);
 
-INSERT INTO Mark (mark, student_id, test_id) VALUES (1.0, @student11ID, @test6ID);
-INSERT INTO Mark (mark, student_id, test_id) VALUES (4.5, @student12ID, @test6ID);
-INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student13ID, @test6ID);
-INSERT INTO Mark (mark, student_id, test_id) VALUES (5.5, @student14ID, @test6ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (1.0, @student13ID, @test6ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (4.5, @student14ID, @test6ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (3.5, @student15ID, @test6ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (5.5, @student16ID, @test6ID);
 
-INSERT INTO Mark (mark, student_id, test_id) VALUES (4.5, @student15ID, @test7ID);
-INSERT INTO Mark (mark, student_id, test_id) VALUES (2.5, @student16ID, @test7ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (4.5, @student17ID, @test7ID);
+INSERT INTO Mark (mark, student_id, test_id) VALUES (2.5, @student18ID, @test7ID);
