@@ -1,0 +1,530 @@
+apiVersion: v1
+kind: Template
+metadata:
+   name: openshift-marky.template
+parameters:
+- description: The OpenShift Namespace where the ImageStream resides.
+  displayName: Namespace
+  name: NAMESPACE
+  required: true
+  value: marky
+objects:
+
+# Secrets
+- apiVersion: v1
+  data:
+    database-password: cml2ZXJzNzch
+    database-root-password: cml2ZXJzNzch
+    database-user: d29sZnJhbQ==
+  kind: Secret
+  metadata:
+    annotations:
+      template.openshift.io/expose-password: '{.data[''database-password'']}'
+      template.openshift.io/expose-root_password: '{.data[''database-root-password'']}'
+      template.openshift.io/expose-username: '{.data[''database-user'']}'
+    labels:
+      app: mysql-persistent
+      template: mysql-persistent-template
+    name: mysql
+    namespace: marky
+    selfLink: /api/v1/namespaces/${NAMESPACE}/secrets/mysql
+  type: Opaque
+
+# Storages
+- apiVersion: "v1"
+  kind: "PersistentVolumeClaim"
+  metadata:
+    name: "mysql"
+  spec:
+    accessModes:
+      - "ReadWriteOnce"
+    resources:
+      requests:
+        storage: "1Gi"
+    volumeName: "pv0001"
+
+# Build Configs
+
+# client application
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      description: Defines how to build the client application
+    labels:
+      app: marky
+    name: marky
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: marky:latest
+    runPolicy: Serial
+    source:
+      git:
+        ref: master
+        uri: https://github.com/riv7/marky.git
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: nodejs:4
+          namespace: openshift
+      type: Source
+    triggers:
+    - generic:
+        secret: 8debbcbe3356820f
+      type: Generic
+    - github:
+        secret: 4a33aae104739862
+      type: GitHub
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    lastVersion: 0
+
+# server application
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      description: Defines how to build the server application
+    labels:
+      app: marky-server
+    name: marky-server
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: marky-server:latest
+    runPolicy: Serial
+    source:
+      git:
+        ref: master
+        uri: https://github.com/riv7/marky-server.git
+      type: Git
+    strategy:
+      # config necessary for multi module maven project
+      sourceStrategy:
+        env:
+        - name: MAVEN_ARGS_APPEND
+          value: -pl webapp --also-make
+        - name: ARTIFACT_DIR
+          value: webapp/target/
+        - name: MODULE_DIR
+          value: webapp
+        from:
+          kind: ImageStreamTag
+          name: wildfly:10.1
+          namespace: openshift
+      type: Source
+    triggers:
+    - generic:
+        secret: bc24654349a00476
+      type: Generic
+    - github:
+        secret: 945db7e3f449fb0e
+      type: GitHub
+    - imageChange: {}
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    lastVersion: 0
+
+# image streams
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    generation: 1
+    labels:
+      app: marky
+    name: marky
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    generation: 1
+    labels:
+      app: marky-server
+    name: marky-server
+
+# Deployment Config
+
+# Client application
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    generation: 1
+    labels:
+      app: marky
+    name: marky
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: marky
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: marky
+          deploymentconfig: marky
+      spec:
+        containers:
+        - env:
+          - name: OPENSHIFT_NODEJS_IP
+            value: 0.0.0.0
+          - name: OPENSHIFT_NAMESPACE
+            value: ${NAMESPACE}
+          image: ${NAMESPACE}/marky:latest
+          imagePullPolicy: Always
+          name: marky
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - marky
+        from:
+          kind: ImageStreamTag
+          name: marky:latest
+          namespace: ${NAMESPACE}
+      type: ImageChange
+    - type: ConfigChange
+
+# Server application
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    generation: 1
+    labels:
+      app: marky-server
+    name: marky-server
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: marky-server
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: marky-server
+          deploymentconfig: marky-server
+      spec:
+        containers:
+        - env:
+          # get data out of secret
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: mysql
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: mysql
+          - name: MYSQL_DATABASE
+            value: markydb
+          - name: MYSQL_DB_ENABLED
+            value: "true"
+          - name: MYSQL_SERVICE_HOST
+            value: mysql
+          - name: MYSQL_SERVICE_PORT
+            value: "3306"
+          image: ${NAMESPACE}/marky-server:latest
+          imagePullPolicy: Always
+          name: marky-server
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - marky-server
+        from:
+          kind: ImageStreamTag
+          name: marky-server:latest
+          namespace: ${NAMESPACE}
+      type: ImageChange
+    - type: ConfigChange
+
+# MySql database
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    generation: 1
+    labels:
+      app: mysql-persistent
+      template: mysql-persistent-template
+    name: mysql
+  spec:
+    replicas: 1
+    selector:
+      name: mysql
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          name: mysql
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: mysql
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: mysql
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-root-password
+                name: mysql
+          - name: MYSQL_DATABASE
+            value: markydb
+          - name: MYSQL_SERVICE_HOST
+            value: mysql
+          - name: MYSQL_SERVICE_PORT
+            value: "3306"
+          image: centos/mysql-57-centos7:latest
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 3306
+            timeoutSeconds: 1
+          name: mysql
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - MYSQL_PWD="$MYSQL_PASSWORD" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE
+                -e 'SELECT 1'
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql/data
+            name: mysql-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - mysql
+        from:
+          kind: ImageStreamTag
+          name: mysql:5.7
+          namespace: openshift
+      type: ImageChange
+    - type: ConfigChange
+
+# Routes
+
+# Client
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+      openshift.io/host.generated: "true"
+    labels:
+      app: marky
+    name: marky
+  spec:
+    host: marky-${NAMESPACE}.192.168.99.100.nip.io
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: marky
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2017-10-26T14:13:23Z
+        status: "True"
+        type: Admitted
+      host: marky-${NAMESPACE}.192.168.99.100.nip.io
+      routerName: router
+      wildcardPolicy: None
+
+# Server
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+      openshift.io/host.generated: "true"
+    labels:
+      app: marky-server
+    name: marky-server
+  spec:
+    host: marky-server-${NAMESPACE}.192.168.99.100.nip.io
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: marky-server
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2017-10-23T13:04:50Z
+        status: "True"
+        type: Admitted
+      host: marky-server-${NAMESPACE}.192.168.99.100.nip.io
+      routerName: router
+      wildcardPolicy: None
+
+# Services
+
+# Client
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    labels:
+      app: marky
+    name: marky
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: marky
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+
+# Server
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    labels:
+      app: marky-server
+    name: marky-server
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: marky-server
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+
+# MySql Database
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: mysql-persistent
+      template: mysql-persistent-template
+    name: mysql
+  spec:
+    ports:
+    - nodePort: 31643
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      name: mysql
+    sessionAffinity: None
+    type: LoadBalancer
+  status:
+    loadBalancer: {}
+
+
